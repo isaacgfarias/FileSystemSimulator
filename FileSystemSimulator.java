@@ -10,7 +10,6 @@ public class FileSystemSimulator {
         journal = new Journal();
     }
 
-    // Métodos de checagem privados
     private boolean alreadyExists(String path) {
         for (Archive a : disk) 
             if (a.getName() == path)
@@ -26,15 +25,13 @@ public class FileSystemSimulator {
         return false;
     }
 
-    // método criando um diretório
     public void createDirectory(String path) {
         if (this.alreadyExists(path)) return;
         Directory newFolder = new Directory(path);
-        disk.add(newFolder); //add diretório ao conjunto destes
-        journal.addEntry("CREATE_DIRECTORY:" + path); // registrando a operação no journal
+        disk.add(newFolder);
+        journal.addEntry("CREATE_DIRECTORY:" + path);
     }
 
-    // método criando um arquivo e conteúdo
     public void createFile(String path, String content) {
         if (this.alreadyExists(path)) return;
         if (this.fileDirectoryExists(path)) {System.out.println("Directory not found!"); return;}
@@ -43,9 +40,7 @@ public class FileSystemSimulator {
         journal.addEntry("CREATE_FILE:" + path + ":" + content);
     }
 
-    // método listando conteúdo de um diretório
     public void listDirectory(String path) {
-        // iterando sobre diretórios e imprimindo os que começam com o caminho dado
         for (Archive a : disk) {
             if (a.getClass() == Directory.class) {
                 if (a.getName().startsWith(path + "/")) {
@@ -60,7 +55,6 @@ public class FileSystemSimulator {
         }
     }
 
-    // método renomeando arquivos
     public void renameFile(String oldPath, String newPath) {
         boolean isIn = false;
         Archive oldFile = null;
@@ -79,7 +73,6 @@ public class FileSystemSimulator {
         }
     }
 
-    // método renomeando diretórios
     public void renameDirectory(String oldPath, String newPath) {
         Set<Archive> directoriesToRemove = new HashSet<>();
         Set<Archive> directoriesToAdd = new HashSet<>();
@@ -117,7 +110,6 @@ public class FileSystemSimulator {
             
     }
 
-    // método copiando arquivos
     public void copyFile(String sourcePath, String destinationPath) {
         Archive targetFile = null;
         boolean isContained = false;
@@ -132,12 +124,10 @@ public class FileSystemSimulator {
         }
     }
 
-    // método salvando o estado do sistema de arquivos no journal
     public void saveToFile(String filename) throws IOException {
         journal.saveToFile(filename); // salvando operações journal nos arquivos
     }
 
-    // método carregando estados anteriores do sistema de arquivos a partir do journal
     public void loadFromFile(String filename) throws IOException, ClassNotFoundException {
         journal.loadFromFile(filename); // carregando operações antigas de um arquivo
         
@@ -215,7 +205,6 @@ public class FileSystemSimulator {
         }
     }
 
-    // método apagando arquivos
     public void deleteFile(String path) {
         Iterator<Archive> iterator = disk.iterator();
         while (iterator.hasNext()) {
@@ -228,25 +217,25 @@ public class FileSystemSimulator {
     }
     
 
-    // método deletando diretórios e seus arquivos contidos
+
     public void deleteDirectory(String path) {
         Set<Archive> filesToRemove = new HashSet<>();
         for (Archive file : disk) {
             if (file.getName().startsWith(path + "/")) {
-                filesToRemove.add(file); // marcando arquivos para remover
+                filesToRemove.add(file);
                 journal.addEntry("DELETE_FILE:" + file);
             }
         }
-        disk.removeAll(filesToRemove); // removendo todos os arquivos
+        disk.removeAll(filesToRemove);
 
         Set<Archive> directoriesToRemove = new HashSet<>();
         for (Archive dir : disk) {
             if (dir.getName().equals(path) || dir.getName().startsWith(path + "/")) {
-                directoriesToRemove.add(dir); // marcando diretório para remover
+                directoriesToRemove.add(dir);
                 journal.addEntry("DELETE_DIRECTORY:" + dir);
             }
         }
-        disk.removeAll(directoriesToRemove); // removendo todos os diretórios
+        disk.removeAll(directoriesToRemove);
     }
 
 

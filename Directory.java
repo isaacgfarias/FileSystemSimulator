@@ -8,8 +8,7 @@ public class Directory extends Archive{
 
     public Directory(String name) {
         super(name);
-        verifyName(); // Se o nome do diretório tiver '.extensão' no nome, será mantido o que estiver antes do ponto.
-        // Armazenas objetos filhos da class Archive: File e Directory.
+        verifyName();
         this.elements = new ArrayList<Archive>(); 
     }
 
@@ -25,14 +24,12 @@ public class Directory extends Archive{
         this.elements.add(a);
     }
 
-    // Lista todos os elementos do diretório e seus respectivos iNodes.
     public void listElements() {
         for(Archive a : this.elements) {
             System.out.println(a.getiNode() + " - " + a.getName());
         }
     }
 
-    // Lista todos os elementos do diretório que tenham o tipo igual ao expecíficado no parâmetro.
     public void listElements(String type) {
         switch (type.toLowerCase()) {
             case "file":
@@ -49,7 +46,6 @@ public class Directory extends Archive{
         }
     }
 
-    // Remove um arquivo do diretório 
     public void removeElement(int node) {
         for (Archive a : this.elements) {
             if (node == a.getiNode()) this.elements.remove(a);

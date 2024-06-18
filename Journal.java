@@ -21,16 +21,18 @@ public class Journal {
         entries.clear(); //
     }
 
-    public void saveToFile(String filename) throws IOException {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
-            out.writeObject(entries);
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public void loadFromFile(String filename) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
             entries = (List<String>) in.readObject();
         }
     }
+
+    public void saveToFile(String filename) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
+            out.writeObject(entries);
+        }
+    }
+
+    
 }

@@ -1,4 +1,3 @@
-
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Random;
@@ -39,8 +38,6 @@ public class Archive {
         return this.iNode;
     }
 
-
-    // O método abaixo precisaram ser implementados para sincronizar com as classes File e Directory;
     public String getContent() { return ""; }    
 
     
